@@ -1,14 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using E_Comerce.DAL.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data;
+using Type = E_Comerce.DAL.Models.Type;
 
 namespace E_Comerce.DAL.Database;
 
-public class DatabaseContext : DbContext
+public class DatabaseContext : IdentityDbContext<User, Role, string>
 {
     private readonly IConfiguration _configuration;
     public DatabaseContext(DbContextOptions options, IConfiguration configuration) : base(options)
@@ -20,4 +20,10 @@ public class DatabaseContext : DbContext
     {
         optionsBuilder.UseSqlServer(_configuration.GetConnectionString("E-ComerceDatabase"));
     }
+
+
+    public DbSet<Type> Types { get; set; }
+    public DbSet<Item> Items { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderItem> OrderItem { get; set; }
 }
