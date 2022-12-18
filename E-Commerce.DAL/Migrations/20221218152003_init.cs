@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace E_Commerce.DAL.Migrations
 {
-    public partial class addedOrderItemAndType : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -193,22 +193,40 @@ namespace E_Commerce.DAL.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TypeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    OrderId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    ItemTypeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Items", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Items_Orders_OrderId",
+                        name: "FK_Items_Types_ItemTypeId",
+                        column: x => x.ItemTypeId,
+                        principalTable: "Types",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrderItem",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    OrderId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ItemId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderItem", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrderItem_Items_ItemId",
+                        column: x => x.ItemId,
+                        principalTable: "Items",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrderItem_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Items_Types_TypeId",
-                        column: x => x.TypeId,
-                        principalTable: "Types",
                         principalColumn: "Id");
                 });
 
@@ -252,14 +270,19 @@ namespace E_Commerce.DAL.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Items_OrderId",
+                name: "IX_Items_ItemTypeId",
                 table: "Items",
-                column: "OrderId");
+                column: "ItemTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Items_TypeId",
-                table: "Items",
-                column: "TypeId");
+                name: "IX_OrderItem_ItemId",
+                table: "OrderItem",
+                column: "ItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItem_OrderId",
+                table: "OrderItem",
+                column: "OrderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_UserId",
@@ -285,10 +308,13 @@ namespace E_Commerce.DAL.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Items");
+                name: "OrderItem");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Items");
 
             migrationBuilder.DropTable(
                 name: "Orders");

@@ -12,19 +12,19 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace E_Commerce.DAL.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20221207181008_addedOrderItem")]
-    partial class addedOrderItem
+    [Migration("20221218180544_addStatus2")]
+    partial class addStatus2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.11")
+                .HasAnnotation("ProductVersion", "6.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("E_Commerce.DAL.Models.Item", b =>
+            modelBuilder.Entity("E_Commerce.Domain.Models.Item", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -33,6 +33,9 @@ namespace E_Commerce.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ItemTypeId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -40,23 +43,41 @@ namespace E_Commerce.DAL.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("TypeId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TypeId");
+                    b.HasIndex("ItemTypeId");
 
                     b.ToTable("Items");
                 });
 
-            modelBuilder.Entity("E_Commerce.DAL.Models.Order", b =>
+            modelBuilder.Entity("E_Commerce.Domain.Models.ItemType", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Types");
+                });
+
+            modelBuilder.Entity("E_Commerce.Domain.Models.Order", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -68,7 +89,7 @@ namespace E_Commerce.DAL.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("E_Commerce.DAL.Models.OrderItem", b =>
+            modelBuilder.Entity("E_Commerce.Domain.Models.OrderItem", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -89,7 +110,7 @@ namespace E_Commerce.DAL.Migrations
                     b.ToTable("OrderItem");
                 });
 
-            modelBuilder.Entity("E_Commerce.DAL.Models.Role", b =>
+            modelBuilder.Entity("E_Commerce.Domain.Models.Role", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -116,21 +137,7 @@ namespace E_Commerce.DAL.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
-            modelBuilder.Entity("E_Commerce.DAL.Models.Type", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Types");
-                });
-
-            modelBuilder.Entity("E_Commerce.DAL.Models.User", b =>
+            modelBuilder.Entity("E_Commerce.Domain.Models.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -309,33 +316,33 @@ namespace E_Commerce.DAL.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("E_Commerce.DAL.Models.Item", b =>
+            modelBuilder.Entity("E_Commerce.Domain.Models.Item", b =>
                 {
-                    b.HasOne("E_Commerce.DAL.Models.Type", "Type")
+                    b.HasOne("E_Commerce.Domain.Models.ItemType", "ItemType")
                         .WithMany()
-                        .HasForeignKey("TypeId");
+                        .HasForeignKey("ItemTypeId");
 
-                    b.Navigation("Type");
+                    b.Navigation("ItemType");
                 });
 
-            modelBuilder.Entity("E_Commerce.DAL.Models.Order", b =>
+            modelBuilder.Entity("E_Commerce.Domain.Models.Order", b =>
                 {
-                    b.HasOne("E_Commerce.DAL.Models.User", "User")
+                    b.HasOne("E_Commerce.Domain.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("E_Commerce.DAL.Models.OrderItem", b =>
+            modelBuilder.Entity("E_Commerce.Domain.Models.OrderItem", b =>
                 {
-                    b.HasOne("E_Commerce.DAL.Models.Item", "Item")
+                    b.HasOne("E_Commerce.Domain.Models.Item", "Item")
                         .WithMany()
                         .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("E_Commerce.DAL.Models.Order", "Order")
+                    b.HasOne("E_Commerce.Domain.Models.Order", "Order")
                         .WithMany()
                         .HasForeignKey("OrderId");
 
@@ -346,7 +353,7 @@ namespace E_Commerce.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("E_Commerce.DAL.Models.Role", null)
+                    b.HasOne("E_Commerce.Domain.Models.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -355,7 +362,7 @@ namespace E_Commerce.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("E_Commerce.DAL.Models.User", null)
+                    b.HasOne("E_Commerce.Domain.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -364,7 +371,7 @@ namespace E_Commerce.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("E_Commerce.DAL.Models.User", null)
+                    b.HasOne("E_Commerce.Domain.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -373,13 +380,13 @@ namespace E_Commerce.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("E_Commerce.DAL.Models.Role", null)
+                    b.HasOne("E_Commerce.Domain.Models.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("E_Commerce.DAL.Models.User", null)
+                    b.HasOne("E_Commerce.Domain.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -388,7 +395,7 @@ namespace E_Commerce.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("E_Commerce.DAL.Models.User", null)
+                    b.HasOne("E_Commerce.Domain.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

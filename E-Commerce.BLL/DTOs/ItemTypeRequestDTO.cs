@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace E_Commerce.DAL.Models;
+namespace E_Commerce.BLL.DTOs;
 
-public class Type
+public class ItemTypeRequestDTO
 {
-    public string Id { get; set; }
-    public string Name { get; set; }
+    public string ItemTypeName { get; set; }
 }

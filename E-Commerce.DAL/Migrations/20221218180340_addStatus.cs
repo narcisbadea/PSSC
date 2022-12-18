@@ -4,7 +4,7 @@
 
 namespace E_Commerce.DAL.Migrations
 {
-    public partial class init : Migration
+    public partial class addStatus : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
