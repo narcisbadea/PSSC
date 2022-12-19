@@ -14,6 +14,7 @@ public class MappingProfiles : Profile
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
         CreateMap<ItemTypeRequestDTO, ItemType>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid().ToString()))
-            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.ItemTypeName)); ;
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.ItemTypeName));
+        CreateMap<RegisterDTO, User>();
     }
 }

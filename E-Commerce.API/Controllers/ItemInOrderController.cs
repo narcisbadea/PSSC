@@ -1,5 +1,6 @@
 ﻿using E_Commerce.BLL.DTOs;
 using E_Commerce.BLL.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,7 @@ namespace E_Comerce.API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> PostItemInOrder(ItemInOrderDTO itemInOrder)
         {
             await _orderItemService.AddItemInOrder(itemInOrder);
