@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'PSSC'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_558F8A0E35A4443FAA67A113D014637C }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_38FC146EBA514777AC8F921FD1936ACF }}
           package: .
