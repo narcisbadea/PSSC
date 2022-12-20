@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using E_Commerce.BLL.DTOs;
+using E_Commerce.BLL.Services.Interfaces;
 using E_Commerce.DAL.Repositoris.Interfaces;
 using E_Commerce.Domain.Models;
 using Microsoft.AspNetCore.Http;
@@ -7,11 +8,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
-namespace E_Commerce.BLL.Services;
+namespace E_Commerce.BLL.Services.Implementation;
 
 public class AuthService : IAuthService
 {

@@ -6,7 +6,7 @@ namespace E_Commerce.DAL.Repositoris.Interfaces
     {
         Task<string> CreateUserAsync(User user);
         Task DeleteUserAsync(User user);
-        Task<User> GetUserById(string userId);
-        Task<User> GetUserByName(string name);
+        Task<User?> GetUserById(string userId);
+        Task<User?> GetUserByName(string name);
     }
 }

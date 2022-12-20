@@ -2,7 +2,7 @@
 using E_Commerce.Domain.Models;
 using System.IdentityModel.Tokens.Jwt;
 
-namespace E_Commerce.BLL.Services
+namespace E_Commerce.BLL.Services.Interfaces
 {
     public interface IAuthService
     {

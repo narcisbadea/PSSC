@@ -1,5 +1,5 @@
 ﻿using E_Commerce.BLL.DTOs;
-using E_Commerce.BLL.Services;
+using E_Commerce.BLL.Services.Interfaces;
 using E_Commerce.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 

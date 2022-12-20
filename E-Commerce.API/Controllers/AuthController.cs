@@ -1,5 +1,5 @@
 ﻿using E_Commerce.BLL.DTOs;
-using E_Commerce.BLL.Services;
+using E_Commerce.BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

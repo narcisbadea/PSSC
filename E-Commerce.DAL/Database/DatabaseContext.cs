@@ -9,7 +9,7 @@ namespace E_Commerce.DAL.Database;
 public class DatabaseContext : IdentityDbContext<User, Role, string>
 {
     private readonly IConfiguration _configuration;
-    public DatabaseContext(DbContextOptions options, IConfiguration configuration) : base(options)
+    public DatabaseContext(IConfiguration configuration) : base()
     {
         _configuration = configuration;
     }

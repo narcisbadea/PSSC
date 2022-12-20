@@ -1,14 +1,10 @@
 ﻿using AutoMapper;
 using E_Commerce.BLL.DTOs;
+using E_Commerce.BLL.Services.Interfaces;
 using E_Commerce.DAL.Repositoris.Interfaces;
 using E_Commerce.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace E_Commerce.BLL.Services;
+namespace E_Commerce.BLL.Services.Implementation;
 
 public class ItemService : IItemService
 {
@@ -26,6 +22,10 @@ public class ItemService : IItemService
     public async Task<IEnumerable<ItemResponseDTO>> GetAllItemsAsync()
     {
         var result = await _itemRepository.GetAllItemsAsync();
+        if(result is null)
+        {
+            return new List<ItemResponseDTO>();
+        }
         return _mapper.Map<IEnumerable<Item>, IEnumerable<ItemResponseDTO>>(result);
     }
 
@@ -33,7 +33,10 @@ public class ItemService : IItemService
     {
         var itemToAdd = _mapper.Map<Item>(item);
         var type = await _itemTypeRepository.GetTypeByIdAsync(item.TypeId);
-        itemToAdd.ItemType = type;
-        await _itemRepository.AddItemAsync(itemToAdd);
+        if (type is not null)
+        {
+            itemToAdd.ItemType = type;
+            await _itemRepository.AddItemAsync(itemToAdd);
+        }
     }
 }

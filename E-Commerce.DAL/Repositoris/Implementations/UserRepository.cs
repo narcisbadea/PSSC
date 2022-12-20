@@ -16,7 +16,6 @@ public class UserRepository : IUserRepository
         _userManager = userManager;
     }
 
-
     public async Task<string> CreateUserAsync(User user)
     {
         await _dbContext.Users.AddAsync(user);
@@ -32,13 +31,13 @@ public class UserRepository : IUserRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<User> GetUserById(string userId)
+    public async Task<User?> GetUserById(string userId)
     {
         var result = await _userManager.FindByIdAsync(userId);
         return result;
     }
 
-    public async Task<User> GetUserByName(string name)
+    public async Task<User?> GetUserByName(string name)
     {
         var result = await _userManager.FindByNameAsync(name);
         return result;

@@ -14,11 +14,11 @@ public class ItemRepository : IItemRepository
         _context = context;
     }
 
-
     public async Task<IEnumerable<Item>> GetAllItemsAsync()
     {
         return await _context.Items
             .Include(i => i.ItemType)
+            .AsNoTracking()
             .ToListAsync();
     }
 
@@ -26,6 +26,7 @@ public class ItemRepository : IItemRepository
     {
         return await _context.Items
             .Include(i => i.ItemType)
+            .AsNoTracking()
             .FirstOrDefaultAsync(i => i.Id == Id);
     }
 

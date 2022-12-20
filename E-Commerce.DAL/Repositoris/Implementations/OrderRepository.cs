@@ -15,10 +15,12 @@ public class OrderRepository : IOrderRepository
         _context = context;
     }
 
-
     public async Task<IEnumerable<Order>> GetAllOrdersAsync()
     {
-        return await _context.Orders.ToListAsync();
+        return await _context.Orders
+            .Include(u => u.User)
+            .AsNoTracking()
+            .ToListAsync();
     }
 
     public async Task<Order?> GetOrderByIdAsync(string Id)
@@ -60,23 +62,27 @@ public class OrderRepository : IOrderRepository
             .Include(o => o.User)
             .FirstOrDefaultAsync(o => o.Id == order.Id);
         _context.Users.Attach(user);
-        if (orderToCancel.User.Id == user.Id)
+        if (orderToCancel is not null)
         {
-            if (orderToCancel.Status != Status.Shipped)
+            if (orderToCancel.User.Id == user.Id)
             {
-                orderToCancel.Status = Status.CanceledByTheCustomer;
-                await _context.SaveChangesAsync();
-                return "Order canceled!";
+                if (orderToCancel.Status != Status.Shipped)
+                {
+                    orderToCancel.Status = Status.CanceledByTheCustomer;
+                    await _context.SaveChangesAsync();
+                    return "Order canceled!";
+                }
+                else
+                {
+                    return "Error: Order shipped!";
+                }
             }
             else
             {
-                return "Error: Order shipped!";
+                return "Error: It's not your order!";
             }
         }
-        else
-        {
-            return "Error: It's not your order!";
-        }
+        return "Error: Order not fout!";
     }
 
     public async Task<OrderDTO> GetOrderByIdToAdmin(string id)
@@ -87,24 +93,29 @@ public class OrderRepository : IOrderRepository
             .Include(o => o.Item)
             .Where(o => o.Order.Id == id)
             .ToListAsync();
-        var items = new List<ItemInOrderDTOToAdmin>();
-        foreach (var item in result) {
-            items.Add(new ItemInOrderDTOToAdmin
-            {
-                ItemName = item.Item.Name,
-                Quantity = item.Quantity
-            });
-        }
-        var order = new OrderDTO
+        if (result.Count > 0)
         {
-            FirstName = result[0].Order.User.FirstName,
-            LastName = result[0].Order.User.LastName,
-            Address = result[0].Order.User.Adress,
-            Items = items,
-            Status = result[0].Order.Status.ToString()
-        };
+            var items = new List<ItemInOrderDTOToAdmin>();
+            foreach (var item in result)
+            {
+                items.Add(new ItemInOrderDTOToAdmin
+                {
+                    ItemName = item.Item.Name,
+                    Quantity = item.Quantity
+                });
+            }
+            var order = new OrderDTO
+            {
+                FirstName = result[0].Order.User.FirstName,
+                LastName = result[0].Order.User.LastName,
+                Address = result[0].Order.User.Adress,
+                Items = items,
+                Status = result[0].Order.Status.ToString()
+            };
 
-        return order;
+            return order;
+        }
+        return new OrderDTO();
     }
 
     public async Task<string> TakeOrder(Order order)
@@ -112,6 +123,10 @@ public class OrderRepository : IOrderRepository
         var orderToCancel = await _context.Orders
             .Include(o => o.User)
             .FirstOrDefaultAsync(o => o.Id == order.Id);
+        if (orderToCancel is null)
+        {
+            return "Error: Order not found!";
+        }
         orderToCancel.Status = Status.Taken;
         await _context.SaveChangesAsync();
         return "Order tacked!";

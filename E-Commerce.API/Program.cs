@@ -1,4 +1,5 @@
-using E_Commerce.BLL.Services;
+using E_Commerce.BLL.Services.Implementation;
+using E_Commerce.BLL.Services.Interfaces;
 using E_Commerce.DAL.Database;
 using E_Commerce.DAL.Repositoris.Implementations;
 using E_Commerce.DAL.Repositoris.Interfaces;

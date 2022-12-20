@@ -1,5 +1,7 @@
-﻿using E_Commerce.BLL.Services;
+﻿using E_Commerce.BLL.DTOs;
+using E_Commerce.BLL.Services.Interfaces;
 using E_Commerce.Domain.DTOs;
+using E_Commerce.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,9 +29,15 @@ namespace E_Comerce.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<OrderDTO>> GetOrderToAdmin(string orderId)
         {
-            return Ok(await _orderService.GetOrderByIdToAdmin(orderId));
+            var result = await _orderService.GetOrderByIdToAdmin(orderId);
+            if(result.Status == null)
+            {
+                return NoContent();
+            }
+            return Ok(result);
         }
 
         [HttpPost("take")]
@@ -38,5 +46,13 @@ namespace E_Comerce.API.Controllers
         {
             return Ok(await _orderService.TakeOrder(orderId));
         }
+
+        [HttpGet("all")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<IEnumerable<OrderViewDTO>>> GetAllOrders()
+        {
+            return Ok(await _orderService.GetAllOrders());
+        }
+
     }
 }
