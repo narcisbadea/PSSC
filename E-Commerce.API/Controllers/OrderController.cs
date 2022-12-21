@@ -1,9 +1,6 @@
-﻿using E_Commerce.BLL.DTOs;
-using E_Commerce.BLL.Services.Interfaces;
+﻿using E_Commerce.BLL.Services.Interfaces;
 using E_Commerce.Domain.DTOs;
-using E_Commerce.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace E_Comerce.API.Controllers
