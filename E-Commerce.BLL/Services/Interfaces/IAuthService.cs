@@ -1,4 +1,5 @@
-﻿using E_Commerce.BLL.DTOs;
+﻿
+using E_Commerce.Domain.DTOs;
 using E_Commerce.Domain.Models;
 using System.IdentityModel.Tokens.Jwt;
 

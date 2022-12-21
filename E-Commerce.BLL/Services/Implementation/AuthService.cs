@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
-using E_Commerce.BLL.DTOs;
+
 using E_Commerce.BLL.Services.Interfaces;
 using E_Commerce.DAL.Repositoris.Interfaces;
+using E_Commerce.Domain.DTOs;
 using E_Commerce.Domain.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
