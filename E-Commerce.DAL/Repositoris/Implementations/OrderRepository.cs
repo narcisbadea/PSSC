@@ -108,7 +108,7 @@ public class OrderRepository : IOrderRepository
             {
                 FirstName = result[0].Order.User.FirstName,
                 LastName = result[0].Order.User.LastName,
-                Address = result[0].Order.User.Adress,
+                Address = result[0].Order.User.Address,
                 Items = items,
                 Status = result[0].Order.Status.ToString()
             };

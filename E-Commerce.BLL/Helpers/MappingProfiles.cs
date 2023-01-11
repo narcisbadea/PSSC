@@ -9,12 +9,12 @@ public class MappingProfiles : Profile
     public MappingProfiles()
     {
         CreateMap<Item, ItemResponseDTO>()
-            .ForMember(dest => dest.ItemType, opt => opt.MapFrom(src => src.ItemType.Name));
+            .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.Name));
         CreateMap<ItemRequestDTO, Item>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid().ToString()));
         CreateMap<ItemTypeRequestDTO, ItemType>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid().ToString()))
-            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.ItemTypeName));
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.TypeName));
         CreateMap<RegisterDTO, User>();
         CreateMap<Order, OrderViewDTO>()
             .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User.FirstName + " " + src.User.LastName))

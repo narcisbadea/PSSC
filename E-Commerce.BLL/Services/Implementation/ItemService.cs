@@ -36,7 +36,7 @@ public class ItemService : IItemService
         var type = await _itemTypeRepository.GetTypeByIdAsync(item.TypeId);
         if (type is not null)
         {
-            itemToAdd.ItemType = type;
+            itemToAdd.Type = type;
             await _itemRepository.AddItemAsync(itemToAdd);
         }
     }

@@ -26,13 +26,7 @@ public class OrderItemRepository : IOrderItemRepository
         {
             if (orderInProgress is null)
             {
-                var order = new Order
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Created = DateTime.UtcNow,
-                    Status = Status.InProgress,
-                    User = user
-                };
+                var order = new Order(Guid.NewGuid().ToString(), user, Status.InProgress, DateTime.UtcNow);
                 _context.Orders.Add(order);
                 await _context.SaveChangesAsync();
             }
@@ -40,13 +34,7 @@ public class OrderItemRepository : IOrderItemRepository
                 .Where(o => o.User.Id == user.Id)
                 .Where(o => o.Status == Status.InProgress)
                 .FirstOrDefaultAsync();
-            _context.OrderItem.Add(new OrderItem
-            {
-                Id = Guid.NewGuid().ToString(),
-                Order = orderInProgress,
-                Item = item,
-                Quantity = quantity
-            });
+            _context.OrderItem.Add(new OrderItem(Guid.NewGuid().ToString(), orderInProgress, item, quantity));
             await _context.SaveChangesAsync();
         }
     }

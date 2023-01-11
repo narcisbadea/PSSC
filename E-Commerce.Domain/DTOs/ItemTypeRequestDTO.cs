@@ -2,5 +2,5 @@
 
 public class ItemTypeRequestDTO
 {
-    public string ItemTypeName { get; set; }
+    public string TypeName { get; set; }
 }

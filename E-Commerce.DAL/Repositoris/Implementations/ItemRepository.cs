@@ -17,7 +17,7 @@ public class ItemRepository : IItemRepository
     public async Task<IEnumerable<Item>> GetAllItemsAsync()
     {
         return await _context.Items
-            .Include(i => i.ItemType)
+            .Include(i => i.Type)
             .AsNoTracking()
             .ToListAsync();
     }
@@ -25,7 +25,7 @@ public class ItemRepository : IItemRepository
     public async Task<Item?> GetItemByIdAsync(string Id)
     {
         return await _context.Items
-            .Include(i => i.ItemType)
+            .Include(i => i.Type)
             .AsNoTracking()
             .FirstOrDefaultAsync(i => i.Id == Id);
     }
